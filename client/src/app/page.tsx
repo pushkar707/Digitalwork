@@ -13,7 +13,7 @@ export default function Home() {
     if(!email.length || !password.length || !process.env.NEXT_PUBLIC_API_URL)
       return
 
-    const res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/login",{
+    const res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/auth/login",{
       email,password
     })
     const data = await res.data    

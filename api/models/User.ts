@@ -6,6 +6,7 @@ const userSchema = new Schema({
         unique:true,
         required:true,
     },
+    name:String,
     password:String,
     isFirebaseAuth:{
         type:Boolean,

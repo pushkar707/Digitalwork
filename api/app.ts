@@ -24,18 +24,14 @@ app.use(cors({
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
-app.post("/register",async (req:Request,res:Response) => {
-    let {email,password,isFirebaseAuth,profileImageUrl} = req.body
+app.post("/auth/register",async (req:Request,res:Response) => {
+    let {email,password} = req.body
     if(!email.length || !password.length)
         return res.json({error:true,message:"Missing required fields"})
     let user
     try {
-        if(!isFirebaseAuth){
-            password = bcrypt.hashSync(password,8)
-            user = await User.create({email,password,isFirebaseAuth:false})
-        }else{
-            user = await User.create({email,isFirebaseAuth:true,profileImageUrl})
-        }
+        password = bcrypt.hashSync(password,8)
+        user = await User.create({email,password,isFirebaseAuth:false})
         return res.json({success:true,refreshToken:getJwtToken(user.id)})
     } catch (error:any) {
         console.log(error);
@@ -46,7 +42,7 @@ app.post("/register",async (req:Request,res:Response) => {
     }
 })
 
-app.post("/login",async (req:Request,res:Response) => {
+app.post("/auth/login",async (req:Request,res:Response) => {
     const {email,password} = req.body;
     try{
         if(!email.length || !password.length)
@@ -65,6 +61,26 @@ app.post("/login",async (req:Request,res:Response) => {
         console.log(e);        
         return res.json({error:true,message:e.message})
     }
+})
+
+app.post("/auth/firebase",async(req:Request,res:Response) => {
+    const {email,name,profileImageUrl} = req.body
+    try{
+        const user = await User.create({email,isFirebaseAuth:true,name,profileImageUrl})
+        return res.json({success:true,"refreshToken":getJwtToken(user.id)})
+    }
+    catch (error:any) {
+        console.log(error);
+        if(error.code == 11000){
+            const user = await User.findOne({email},{id:1})
+            console.log(user);
+            if(user)           
+                return res.json({success:true,"refreshToken":getJwtToken(JSON.stringify(user._id))})
+        }
+        return res.json({error:true,message:error.message})
+    }
+    
+    return res.json({success:true,refreshToken:"dsfcwdsxc"})
 })
  
 const PORT = process.env.PORT || 8000

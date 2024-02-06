@@ -19,7 +19,7 @@ export default function Home() {
     if(password != confirmPassword)
       return
 
-    const res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/register",{
+    const res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/auth/register",{
       email,password,isFirebaseAuth:false
     })
     const data = await res.data
