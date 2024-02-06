@@ -1,5 +1,5 @@
 "use client"
-import { Checkbox, FormControlLabel, Button } from '@mui/material';
+import { Checkbox, FormControlLabel, Button, capitalize } from '@mui/material';
 import SignInWithButton from '../components/buttons/SignInWithButton';
 import { githubSignIn, googleSignIn } from '../utils/firebaseConfig';
 import { FormEvent, useState } from 'react';
@@ -11,11 +11,24 @@ export default function Home() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-    if(!email.length || !password.length || !confirmPassword.length)
+  async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
+    e.preventDefault()
+    if(!email.length || !password.length || !confirmPassword.length || !process.env.NEXT_PUBLIC_API_URL)
       return
 
-    const res = await axios.get("")
+    if(password != confirmPassword)
+      return
+
+    const res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/register",{
+      email,password,isFirebaseAuth:false
+    })
+    const data = await res.data
+    console.log(data);
+    
+    if(data.success){
+      localStorage.setItem("refreshToken",data.refreshToken)
+      window.location.href = "/dashboard"
+    }   
   }
 
   return (
@@ -54,7 +67,7 @@ export default function Home() {
               label="Remember me"
               className='-my-1'
             />
-            <Button variant="contained" color="primary" className='bg-blue-600' fullWidth size="large">
+            <Button type='submit' variant="contained" color="primary" className='bg-blue-600' fullWidth size="large">
               Sign Up
             </Button>
           </form>

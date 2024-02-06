@@ -2,8 +2,27 @@
 import { Checkbox, FormControlLabel, Button } from '@mui/material';
 import SignInWithButton from './components/buttons/SignInWithButton';
 import { githubSignIn, googleSignIn } from './utils/firebaseConfig';
+import { FormEvent, useState } from 'react';
+import axios from 'axios';
 
 export default function Home() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
+    e.preventDefault()
+    if(!email.length || !password.length || !process.env.NEXT_PUBLIC_API_URL)
+      return
+
+    const res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/login",{
+      email,password
+    })
+    const data = await res.data    
+    if(data.success){
+      localStorage.setItem("refreshToken",data.refreshToken)
+      window.location.href = "/dashboard"
+    }  
+  }
+
   return (
     <main className="flex min-h-screen flex-col w-screen items-center justify-center px-10 py-10 md:py-20 bg-slate-800">
       <div  className="rounded overflow-hidden w-full h-full md:w-4/5 xl:w-2/3 flex flex-grow">
@@ -31,15 +50,15 @@ export default function Home() {
               <hr className='flex-grow border-slate-400' /><span className='mx-1'>or</span><hr className='flex-grow border-slate-400' />
             </div>
           </div>
-          <form className="gap-y-3 flex flex-col">
-            <input type="email" placeholder="Email address" className="border text-sm xl:text-base border-slate-300 px-3 py-2 w-full" />
-            <input type="password" placeholder="Password" className="border text-sm xl:text-base border-slate-300 px-3 py-2 w-full" />
+          <form className="gap-y-3 flex flex-col" onSubmit={handleSubmit}>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address" className="border text-sm xl:text-base border-slate-300 px-3 py-2 w-full" />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="border text-sm xl:text-base border-slate-300 px-3 py-2 w-full" />
             <FormControlLabel
               control={<Checkbox id="keep_signed_in" color="primary" />}
               label="Remember me"
               className='-my-1'
             />
-            <Button variant="contained" color="primary" className='bg-blue-600' fullWidth size="large">
+            <Button type='submit' variant="contained" color="primary" className='bg-blue-600' fullWidth size="large">
               Sign In
             </Button>
           </form>
