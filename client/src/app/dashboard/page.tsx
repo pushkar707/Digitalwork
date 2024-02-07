@@ -8,13 +8,14 @@ import { Select } from '@mui/base/Select';
 import { Option } from '@mui/base/Option';
 import Step1 from '../components/steps/Step1';
 import Step2 from '../components/steps/Step2';
+import Step3 from '../components/steps/Step3';
 
 
 const Page = () => {
   const router = useRouter()
 
   const [user, setUser] = useState({})
-  const [activeSelection, setActiveSelection] = useState<number>(1)
+  const [activeSelection, setActiveSelection] = useState<number>(2)
 
   useEffect(() => {
     const verifyToken = async() => {
@@ -51,7 +52,7 @@ const Page = () => {
   const leftMenu= [
     {heading: "Your details", subHeading:"Fill your basic details"},
     {heading: "License Info", subHeading:"License Specifications"},
-    {heading: "Your details", subHeading:"Fill your basic details"},
+    {heading: "Add Documents", subHeading:"Upload your documents"},
     {heading: "Your details", subHeading:"Fill your basic details"},
     {heading: "Your details", subHeading:"Fill your basic details"},
     {heading: "Your details", subHeading:"Fill your basic details"},
@@ -88,7 +89,8 @@ const Page = () => {
           <div className='flex-grow pl-14 pt-10 pr-5 overflow-y-scroll scroll-container'>
             <p className='opacity-50 text-sm mb-2'>Step {activeSelection+1} of 6</p>
             {activeSelection === 0 ? <Step1 setActiveSelection={setActiveSelection} />:
-            activeSelection === 1? <Step2/> : "" }
+            activeSelection === 1? <Step2/> :
+            activeSelection === 2 ? <Step3/> : "" }
             
           </div>
         </div>

@@ -51,6 +51,11 @@ const Step1 = ({setActiveSelection}:{setActiveSelection:Function}) => {
                 </div>
 
                 <div className="mb-5 flex items-center">
+                    <label htmlFor="name" className='w-28 md:w-36 lg:w-44 inline-block'>Aadhar Number: </label>
+                    <input type="text" placeholder='Aadhar Number' className='rounded px-3 py-1 bg-slate-600 w-full max-w-52' />
+                </div>
+
+                <div className="mb-5 flex items-center">
                     <label htmlFor="name" className='w-28 md:w-36 lg:w-44 inline-block'>DOB: </label>
                     <input type="date" placeholder='Father Name' className='text-slate-400 rounded px-3 py-1 bg-slate-600 w-full max-w-52' />
                 </div>
