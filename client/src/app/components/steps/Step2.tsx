@@ -1,10 +1,39 @@
 import { Button } from '@mui/material'
-import React, { FormEvent } from 'react'
+import axios from 'axios'
+import React, { FormEvent, useState } from 'react'
 
-const Step2 = () => {
-    function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-        throw new Error('Function not implemented.')
+const Step2 = ({setActiveSelection}:{setActiveSelection:Function}) => {
+
+    const [licenseCategoriesSelected, setlicenseCategoriesSelected] = useState<string[]>([])
+    const [isCommercialLicense, setisCommercialLicense] = useState(false)
+    const [isDonatingOrgans, setisDonatingOrgans] = useState(false)
+
+    async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
+        e.preventDefault()
+
+        const res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/user/details/add",{
+            refreshToken:localStorage.getItem("refreshToken"),
+            licenseCategories:licenseCategoriesSelected,
+            selfDeclationFilled:false,
+            isCommercialLicense,
+            isDonatingOrgans            
+        })
+        const data = await res.data
+        console.log(data);        
+
+        if(data.success)
+            setActiveSelection(2)
     }
+
+    const handleCheckboxChange = (value:string) => {
+        if (licenseCategoriesSelected.includes(value)) {
+          // If the checkbox is already selected, remove it from the array
+          setlicenseCategoriesSelected(licenseCategoriesSelected.filter((item) => item !== value));
+        } else {
+          // If the checkbox is not selected, add it to the array
+          setlicenseCategoriesSelected([...licenseCategoriesSelected, value]);
+        }
+    };
 
     const licenseCategories = [
         {value:"MCWOG",label:"MCWOG (Motorcycle Without Gear)"},
@@ -26,7 +55,7 @@ const Step2 = () => {
                         {licenseCategories.map(category => {
                             const {value,label} = category
                             return <div className='flex items-center gap-x-3'>
-                                        <input type="checkbox" id={value} name='licenseCategory'/>
+                                        <input onChange={() => handleCheckboxChange(value)} type="checkbox" id={value} name='licenseCategory'/>
                                         <label htmlFor={value}>{label}</label>
                                     </div>
                         })}                        
@@ -43,12 +72,12 @@ const Step2 = () => {
                 <p className=' text-lg mb-1'>Is this a commercial License? </p>
                 <div className='flex gap-x-6 opacity-85 ml-1'>
                     <div className='flex items-center gap-x-1'>
-                        <input type="radio" id='yes_commercial' value={1} name='isCommercialLicense' />
+                        <input onChange={(e) => setisCommercialLicense(JSON.parse(e.target.value))} type="radio" id='yes_commercial' value={"true"} name='isCommercialLicense' />
                         <label htmlFor="yes_commercial">Yes</label>
                     </div>
 
                     <div className='flex items-center gap-x-1'>
-                        <input type="radio" id='no_commercial' value={0} name='isCommercialLicense' />
+                        <input onChange={(e) => setisCommercialLicense(JSON.parse(e.target.value))} type="radio" id='no_commercial' value={"false"} name='isCommercialLicense' />
                         <label htmlFor="no_commercial">No</label>
                     </div>
                 </div>
@@ -58,12 +87,12 @@ const Step2 = () => {
                 <p className=' text-lg mb-1'>Are you willing to donate your organs in case of accidental death? </p>
                 <div className='flex gap-x-6 opacity-85 ml-1'>
                     <div className='flex items-center gap-x-1'>
-                        <input type="radio" id='yes_organs' value={1} name='organsDonation' />
+                        <input onChange={(e) => setisDonatingOrgans(JSON.parse(e.target.value))} type="radio" id='yes_organs' value={"true"} name='organsDonation' />
                         <label htmlFor="yes_organs">Yes</label>
                     </div>
 
                     <div className='flex items-center gap-x-1'>
-                        <input type="radio" id='no_organs' value={0} name='organsDonation' />
+                        <input onChange={(e) => setisDonatingOrgans(JSON.parse(e.target.value))} type="radio" id='no_organs' value={"false"} name='organsDonation' />
                         <label htmlFor="no_organs">No</label>
                     </div>
                 </div>

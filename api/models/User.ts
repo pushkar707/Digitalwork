@@ -12,7 +12,25 @@ const userSchema = new Schema({
         type:Boolean,
         required:true
     },
-    profileImageUrl:String
+    mobileNumber: String,
+    fatherName:String,
+    aadharnumber:{
+        type: String,
+        unique: true,
+    },
+    dob:String,
+    state:String,
+    category:String,
+    bloodGroup:String,
+    gender:String,
+    addressLine1:String,
+    addressLine2:String,
+    pincode:String,
+
+    licenseCategories:[String],
+    selfDeclationFilled:Boolean,
+    isCommercialLicense:Boolean,
+    isDonatingOrgans: Boolean
 })
 
 export default mongoose.model("User",userSchema)

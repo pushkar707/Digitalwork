@@ -45,9 +45,9 @@ router.post("/login",async (req:Request,res:Response) => {
 })
 
 router.post("/firebase",async(req:Request,res:Response) => {
-    const {email,name,profileImageUrl} = req.body
+    const {email,name} = req.body
     try{
-        const user = await User.create({email,isFirebaseAuth:true,name,profileImageUrl})
+        const user = await User.create({email,isFirebaseAuth:true,name})
         return res.json({success:true,"refreshToken":getJwtToken(user.id)})
     }
     catch (error:any) {
