@@ -49,12 +49,9 @@ router.get("/fees", checkRefreshToken, async(req:ExtendedRequest, res:Response) 
 
 router.put("/takeTest", checkRefreshToken, async(req:ExtendedRequest, res:Response) => {
     const userId = req.userId
-    const user = await User.findById(userId,{learningTestFeesPaid:1, testTaken:1})
-    console.log("Route accessed");
-    
-
+    const user = await User.findById(userId,{learningTestFeesPaid:1, testTaken:1, profileImageKey:1, name:1})
     if(!user)
-        return 
+        return
 
     if(!user.learningTestFeesPaid)
         return res.json({success:false,feesPaid: false, message: "Fees for the test has not been paid"})
@@ -62,7 +59,8 @@ router.put("/takeTest", checkRefreshToken, async(req:ExtendedRequest, res:Respon
     user.testTaken = true
     user.learningTestFeesPaid = false
     await user.save()
-    return res.json({success:true,message:"User's test attempt recorded"})
+    const {profileImageKey, name} = user
+    return res.json({success:true,message:"User's test attempt recorded",profileImageKey,name})
 })
 
 router.put("/testResults", checkRefreshToken, async (req:ExtendedRequest, res:Response) => {

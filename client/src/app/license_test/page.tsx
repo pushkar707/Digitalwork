@@ -10,6 +10,9 @@ const Page = () => {
 
     const router = useRouter()
 
+    const [profileImageKey, setProfileImageKey] = useState("")
+    const [name, setName] = useState("")
+
     const addTestAttempt = async () => {
         const refreshToken = localStorage.getItem("refreshToken")
         const res = await axios.put(process.env.NEXT_PUBLIC_API_URL + "/user/details/takeTest",{
@@ -20,6 +23,10 @@ const Page = () => {
 
         if(!data.success)
             router.push("/dashboard")
+        else{
+            setProfileImageKey(data.profileImageKey)
+            setName(data.name)
+        }
     }
     useEffect(() => {
         addTestAttempt()
@@ -63,6 +70,7 @@ const Page = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
+        setoptionSelected(null)
         console.log(typeof(optionSelected));
         console.log(currentQuestion.answer);        
         
@@ -114,10 +122,10 @@ const Page = () => {
   return (
     <main className='max-w-sreen overflow-x-hidden h-screen bg-slate-800 text-white'>
         <div className='flex max-w-screen w-full flex-wrap'>
-            <img src="https://learner-license-application.s3.ap-south-1.amazonaws.com/17073740689841.jpg" className='w-[156px] h-[180px] p-1 border-b border-r'  alt="" />
+            <img src={`https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_BUCKET_REGION}.amazonaws.com/${profileImageKey}`} className='w-[156px] h-[180px] p-1 border-b border-r'  alt="" />
             <div className='flex-grow border-b border-r flex justify-center items-center gap-y-1 flex-col py-4 border-slate-400'>
                 <p className='font-semibold text-xl'>Name</p>
-                <p className='text-lg opacity-90'>Pushkar</p>
+                <p className='text-lg opacity-90'>{name}</p>
             </div>
             <div className='flex-grow border-b border-r flex justify-center items-center gap-y-1 flex-col py-4 border-slate-400'>
                 <p className='font-semibold text-xl'>Question</p>
