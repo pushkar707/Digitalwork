@@ -13,7 +13,7 @@ const Page = () => {
   const router = useRouter()
 
   const [user, setUser] = useState({})
-  const [activeSelection, setActiveSelection] = useState<number>(2)
+  const [activeSelection, setActiveSelection] = useState<number>(3)
 
   useEffect(() => {
     const verifyToken = async() => {

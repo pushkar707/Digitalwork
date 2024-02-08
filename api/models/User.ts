@@ -35,6 +35,11 @@ const userSchema = new Schema({
     aadharImageKey:String,
     profileImageKey: String,
     signatureImageKey: String,
+
+    feesPaid: {
+        type: Boolean,
+        default: false
+    }
 })
 
 export default mongoose.model("User",userSchema)

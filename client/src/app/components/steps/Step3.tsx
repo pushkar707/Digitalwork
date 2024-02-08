@@ -34,16 +34,18 @@ const Step3 = ({setActiveSelection}:{setActiveSelection: Function}) => {
         })
         await Promise.all(uploadpromise)
         console.log(keys);
+        if(keys.length){
+            const add_keys_res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/user/details/add",{
+                refreshToken: localStorage.getItem("refreshToken"),
+                ...keys
+            })
+            const add_keys_data = await add_keys_res.data
+            console.log(add_keys_data);
+    
+            if(add_keys_data.success)
+                setActiveSelection(3)
+        }
         
-        const add_keys_res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/user/details/add",{
-            refreshToken: localStorage.getItem("refreshToken"),
-            ...keys
-        })
-        const add_keys_data = await add_keys_res.data
-        console.log(add_keys_data);
-
-        if(add_keys_data.success)
-            setActiveSelection(3)        
     }
     
 
