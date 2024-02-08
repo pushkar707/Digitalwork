@@ -13,7 +13,7 @@ const Page = () => {
   const router = useRouter()
 
   const [user, setUser] = useState({})
-  const [activeSelection, setActiveSelection] = useState<number>(1)
+  const [activeSelection, setActiveSelection] = useState<number>(2)
 
   useEffect(() => {
     const verifyToken = async() => {
@@ -88,7 +88,7 @@ const Page = () => {
             <p className='opacity-50 text-sm mb-2'>Step {activeSelection+1} of 6</p>
             {activeSelection === 0 ? <Step1 setActiveSelection={setActiveSelection} />:
             activeSelection === 1? <Step2 setActiveSelection={setActiveSelection} /> :
-            activeSelection === 2 ? <Step3/> :
+            activeSelection === 2 ? <Step3 setActiveSelection={setActiveSelection} /> :
             activeSelection === 3 ? <Step4/> : "" }
             
           </div>

@@ -30,7 +30,11 @@ const userSchema = new Schema({
     licenseCategories:[String],
     selfDeclationFilled:Boolean,
     isCommercialLicense:Boolean,
-    isDonatingOrgans: Boolean
+    isDonatingOrgans: Boolean,
+
+    aadharImageKey:String,
+    profileImageKey: String,
+    signatureImageKey: String,
 })
 
 export default mongoose.model("User",userSchema)

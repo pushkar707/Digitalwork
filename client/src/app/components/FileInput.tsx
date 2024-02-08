@@ -7,8 +7,7 @@ const FileInput = ({fileFor, setInputFileFunction, maxImageHeight, maxImageWidth
         if(!e.currentTarget.files || !e.currentTarget.files.length)
             return        
         const url = URL.createObjectURL(e.currentTarget.files[0])
-        setInputFileFunction(e.currentTarget.files[0])
-        console.log(url);        
+        setInputFileFunction(e.currentTarget.files[0])       
         setImageUrl(url)
     }
 
