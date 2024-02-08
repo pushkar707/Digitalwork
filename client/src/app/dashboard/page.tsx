@@ -7,6 +7,7 @@ import Step1 from '../components/steps/Step1';
 import Step2 from '../components/steps/Step2';
 import Step3 from '../components/steps/Step3';
 import Step4 from '../components/steps/Step4';
+import Step5 from '../components/steps/Step5';
 
 
 const Page = () => {
@@ -52,7 +53,7 @@ const Page = () => {
     {heading: "License Info", subHeading:"License Specifications"},
     {heading: "Add Documents", subHeading:"Upload your documents"},
     {heading: "Fee Payment", subHeading:"Pay License fees"},
-    {heading: "Your details", subHeading:"Fill your basic details"},
+    {heading: "Give Test", subHeading:"Attempt License test"},
     {heading: "Your details", subHeading:"Fill your basic details"},
   ]
   return (
@@ -89,7 +90,8 @@ const Page = () => {
             {activeSelection === 0 ? <Step1 setActiveSelection={setActiveSelection} />:
             activeSelection === 1? <Step2 setActiveSelection={setActiveSelection} /> :
             activeSelection === 2 ? <Step3 setActiveSelection={setActiveSelection} /> :
-            activeSelection === 3 ? <Step4/> : "" }
+            activeSelection === 3 ? <Step4/> :
+            activeSelection === 4 ? <Step5/> : "" }
             
           </div>
         </div>

@@ -36,10 +36,7 @@ const Step4 = () => {
 
     if(data.success){
       router.push(data.paymentLink)
-    }
-
-    
-    
+    }    
   }
 
   return (

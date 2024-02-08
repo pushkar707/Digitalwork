@@ -27,7 +27,7 @@ export const stripeWebhookController = async (req:ExtendedRequest, res:Response)
         const metaData = event.data.object.metadata;
         console.log(metaData);
         const {userId} = metaData
-        await User.findByIdAndUpdate(userId, {feesPaid: true})
+        await User.findByIdAndUpdate(userId, {totalFeesPaid: true, learningTestFeesPaid:true})
     }
     res.send()
 }

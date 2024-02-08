@@ -43,9 +43,33 @@ router.get("/fees", checkRefreshToken, async(req:ExtendedRequest, res:Response) 
         fees[category + " test"] = 300
         total+=300
     });
-    // console.log(fees);
     
     return res.json({success:true, fees,total})
+})
+
+router.put("/takeTest", checkRefreshToken, async(req:ExtendedRequest, res:Response) => {
+    const userId = req.userId
+    const user = await User.findById(userId,{learningTestFeesPaid:1, testTaken:1})
+    console.log("Route accessed");
+    
+
+    if(!user)
+        return 
+
+    if(!user.learningTestFeesPaid)
+        return res.json({success:false,feesPaid: false, message: "Fees for the test has not been paid"})
+
+    user.testTaken = true
+    user.learningTestFeesPaid = false
+    await user.save()
+    return res.json({success:true,message:"User's test attempt recorded"})
+})
+
+router.put("/testResults", checkRefreshToken, async (req:ExtendedRequest, res:Response) => {
+    const userId = req.userId
+    const {testPassed} = req.body
+    await User.findByIdAndUpdate(userId, {testPassed})
+    return res.json({success:true, message: "User updated"})
 })
 
 module.exports = router
