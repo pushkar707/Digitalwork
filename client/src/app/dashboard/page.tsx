@@ -57,7 +57,6 @@ const Page = () => {
     }
   }
 
-
   useEffect(() => {
     selectStep()
   },[user])
@@ -113,7 +112,7 @@ const Page = () => {
             <p className='opacity-50 text-sm mb-2'>Step {activeSelection+1} of 6</p>
             {activeSelection === 0 ? <Step1 setActiveSelection={setActiveSelection} user={user} />:
             activeSelection === 1? <Step2 setActiveSelection={setActiveSelection} user={user} /> :
-            activeSelection === 2 ? <Step3 setActiveSelection={setActiveSelection} /> :
+            activeSelection === 2 ? <Step3 setActiveSelection={setActiveSelection} user={user} /> :
             activeSelection === 3 ? <Step4/> :
             activeSelection === 4 ? <Step5/> :
             activeSelection === 5 ? <Step6/> : "" }            

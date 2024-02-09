@@ -7,7 +7,8 @@ import { ExtendedRequest, checkRefreshToken } from "../utils/middleware";
 const router = Router()
 
 router.post("/add",checkRefreshToken,async(req:ExtendedRequest,res:Response) => {
-    const userId = req.userId    
+    const userId = req.userId
+    console.log("Route accessed");    
 
     await User.findByIdAndUpdate(userId,req.body)
     return res.json({success:true,message:"User updated successfully"})

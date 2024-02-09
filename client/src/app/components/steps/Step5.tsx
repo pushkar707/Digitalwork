@@ -7,7 +7,7 @@ const Step5 = () => {
             <p className='text-xl font-semibold'>License Test</p>
             <div className="ml-2 mt-6">
                 <p>Please Refer to following pdf for test preparation:&nbsp; 
-                    <a className='text-blue-400' href="https://transport.delhi.gov.in/sites/default/files/generic_multiple_files/qbankltest.pdf">Question Bank</a>
+                    <a target='_blank' className='text-blue-400' href="https://transport.delhi.gov.in/sites/default/files/generic_multiple_files/qbankltest.pdf">Question Bank</a>
                 </p>
 
                 <p className='text-xl font-medium my-4'>Rules: </p>
