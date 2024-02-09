@@ -13,6 +13,16 @@ router.post("/add",checkRefreshToken,async(req:ExtendedRequest,res:Response) => 
     return res.json({success:true,message:"User updated successfully"})
 })
 
+router.get("/all",checkRefreshToken,  async(req:ExtendedRequest, res:Response) => {
+    const userId = req.userId
+
+    const user = await User.findById(userId)
+    if(!user)
+        return
+
+    return res.json({success:true, user})
+})
+
 router.get("/image_upload_link", async (req:ExtendedRequest,res:Response) => {
     const {key} = req.query
     if(!key)

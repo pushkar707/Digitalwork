@@ -17,40 +17,50 @@ import { auth } from '../utils/firebaseConfig';
 const Page = () => {
   const router = useRouter()
 
-  const [user, setUser] = useState({})
-  const [activeSelection, setActiveSelection] = useState<number>(5)
+  const [user, setUser] = useState<null | {[key:string]:any}>(null)
+  const [activeSelection, setActiveSelection] = useState<number>(0)
+
+  const getUserDetails = async () => {
+    const refreshToken = localStorage.getItem("refreshToken")
+    if(!refreshToken)
+      return router.push("/")
+    const res = await axios.get(process.env.NEXT_PUBLIC_API_URL + "/user/details/all?refreshToken="+refreshToken)
+    const data = await res.data
+    console.log(data);
+    
+    if(data.success){
+      return setUser(data.user)
+    }  
+    return router.push("/")
+  }
 
   useEffect(() => {
-    const verifyToken = async() => {
-      const refreshToken = localStorage.getItem("refreshToken")
-      if(!refreshToken)
-        return router.push("/")
-      const res = await axios.get(process.env.NEXT_PUBLIC_API_URL + "/auth/verify?refreshToken="+refreshToken)
-      const data = await res.data
-      console.log(data);
-      
-      if(data.success){
-        return setUser(data.user)
-      }  
-      return router.push("/")
-    }
-    verifyToken()
-
-    const selectTags = document.querySelectorAll("select")
-    selectTags?.forEach((tag: any) => {
-      console.log(tag);
-      
-      tag.addEventListener("change",(e:ChangeEvent<HTMLInputElement>) => {
-        e.currentTarget.classList.remove("text-slate-400")
-        e.currentTarget.classList.add("text-white")
-      }) 
-    });
-
-    document.querySelector("input[type='date']")?.addEventListener("change",(e:any) =>{
-      e.currentTarget.classList.remove("text-slate-400")
-      e.currentTarget.classList.add("text-white")
-    })
+    getUserDetails()
   },[])
+
+  const selectStep = () => {
+    if(user !== null){
+      if(!user.mobileNumber || !user.fatherName || !user.aadharnumber || !user.dob || !user.state|| !user.category|| !user.bloodGroup|| !user.gender|| !user.addressLine1|| !user.addressLine2|| !user.pincode)
+        setActiveSelection(0)
+      else if(!user.licenseCategories || user.selfDeclationFilled===null || user.isCommercialLicense===null || user.isDonatingOrgans===null)
+        setActiveSelection(1)
+      else if(!user.aadharImageKey || !user.profileImageKey ||!user.signatureImageKey)
+        setActiveSelection(2)
+      else if(user.totalFeesPaid && user.testPassed)
+        setActiveSelection(5)
+      else if(!user.totalFeesPaid || !user.learningTestFeesPaid)
+        // if both unpaid, then no fees is paid, if only test fees unpaid means test failed once
+        setActiveSelection(3)
+      else if(!user.TestTaken)
+        setActiveSelection(4)
+      
+    }
+  }
+
+
+  useEffect(() => {
+    selectStep()
+  },[user])
 
   const leftMenu= [
     {heading: "Your details", subHeading:"Fill your basic details"},
@@ -101,8 +111,8 @@ const Page = () => {
           </div>
           <div className='flex-grow pl-7 lg:pl-14 pt-10 pr-5 overflow-y-scroll scroll-container'>
             <p className='opacity-50 text-sm mb-2'>Step {activeSelection+1} of 6</p>
-            {activeSelection === 0 ? <Step1 setActiveSelection={setActiveSelection} />:
-            activeSelection === 1? <Step2 setActiveSelection={setActiveSelection} /> :
+            {activeSelection === 0 ? <Step1 setActiveSelection={setActiveSelection} user={user} />:
+            activeSelection === 1? <Step2 setActiveSelection={setActiveSelection} user={user} /> :
             activeSelection === 2 ? <Step3 setActiveSelection={setActiveSelection} /> :
             activeSelection === 3 ? <Step4/> :
             activeSelection === 4 ? <Step5/> :

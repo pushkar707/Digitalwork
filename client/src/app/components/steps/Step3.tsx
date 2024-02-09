@@ -49,11 +49,15 @@ const Step3 = ({setActiveSelection}:{setActiveSelection: Function}) => {
     }
     
 
+    function showConfirmModal(event: MouseEvent<HTMLDivElement, MouseEvent>): void {
+        throw new Error('Function not implemented.')
+    }
+
   return (
     <>
         <p className='text-xl font-semibold'>Upload Documents</p>
 
-        <form action="" className='mt-5 ml-2' onSubmit={handleSubmit}>
+        <div action="" className='mt-5 ml-2'>
 
             <div className=' flex flex-col gap-y-8 mt-9'>
                 <FileInput fileFor='Aadhar Card' maxImageHeight={"192"} maxImageWidth={"320"} setInputFileFunction={setAadharInput} />
@@ -62,14 +66,18 @@ const Step3 = ({setActiveSelection}:{setActiveSelection: Function}) => {
             </div>
 
             <div className='mt-6 flex justify-between w-full md:w-36 lg:w-96'>
-                <Button variant="contained" color="success" className='mt-5 bg-green-500 rounded-lg px-5' size="medium">
-                    Back
-                </Button>
-                <Button type='submit' variant="contained" color="success" className='mt-5 bg-green-500 rounded-lg px-5' size="medium">
-                    Next
-                </Button>
+                <div onClick={() => setActiveSelection(1)} >
+                    <Button variant="contained" color="success" className='mt-5 bg-green-500 rounded-lg px-5' size="medium">
+                        Back
+                    </Button>
+                </div>
+                <div onClick={showConfirmModal} >
+                    <Button type='button' variant="contained" color="success" className='mt-5 bg-green-500 rounded-lg px-5' size="medium">
+                        Next
+                    </Button>
+                </div>
             </div>
-        </form>
+        </div>
     </>
   )
 }

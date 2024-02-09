@@ -1,9 +1,9 @@
 import { bloodGroups, categories, states } from '@/app/dashboard/data'
 import { Button } from '@mui/material'
 import axios from 'axios'
-import React, { FormEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-const Step1 = ({setActiveSelection}:{setActiveSelection:Function}) => {
+const Step1 = ({setActiveSelection, user}:{setActiveSelection:Function, user:{[key:string]:any} | null}) => {
 
     const [userBasicDetails, setUserBasicDetails] = useState({
         name:"",
@@ -20,6 +20,55 @@ const Step1 = ({setActiveSelection}:{setActiveSelection:Function}) => {
         pincode:"",
     })
 
+    useEffect(() => {
+        if(user){
+            setUserBasicDetails({
+                name:user.name,
+                mobileNumber:user.mobileNumber,
+                fatherName:user.fatherName,
+                aadharnumber:user.aadharnumber,
+                dob:user.dob,
+                state:user.state,
+                category:user.category,
+                bloodGroup:user.bloodGroup,
+                gender:user.gender,
+                addressLine1:user.addressLine1,
+                addressLine2:user.addressLine2,
+                pincode:user.pincode,
+            })
+        }
+    },[user]) 
+
+    useEffect(() => {
+        const selectTags = document.querySelectorAll("select")
+        selectTags?.forEach((tag: HTMLSelectElement) => {            
+            if(!tag.value){
+                // @ts-ignore
+                tag.addEventListener("change",(e:ChangeEvent<HTMLInputElement>) => {
+                    e.currentTarget.classList.remove("text-slate-400")
+                    e.currentTarget.classList.add("text-white")
+                })
+            }else{
+                tag.classList.remove("text-slate-400")
+                tag.classList.add("text-white")
+            }
+        });
+
+        const dateElem:HTMLInputElement | null = document.querySelector("input[type='date']")
+        if(dateElem){
+            if(dateElem.value){
+                dateElem.classList.remove("text-slate-400")
+                dateElem.classList.add("text-white")
+            }else{
+                // @ts-ignore
+                dateElem.addEventListener("change",(e:ChangeEvent<HTMLInputElement>) => {
+                    e.currentTarget.classList.remove("text-slate-400")
+                    e.currentTarget.classList.add("text-white")
+                })
+            }
+        }
+    },[userBasicDetails])
+        
     async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
         e.preventDefault()
 
@@ -29,7 +78,6 @@ const Step1 = ({setActiveSelection}:{setActiveSelection:Function}) => {
         })
         const data = await res.data
         console.log(data);
-        
 
         if(data.success)
             setActiveSelection(1)
@@ -82,7 +130,7 @@ const Step1 = ({setActiveSelection}:{setActiveSelection:Function}) => {
                         <select onChange={(e) => modidyUserDetails(e,"state")} className='text-slate-400 p-2 rounded bg-slate-600 outline-none w-full'>
                             <option disabled selected className='text-white bg-slate-600' value={""}>Select your state</option>
                             {states.map((state,index) => {
-                                return <option key={index} className='text-white bg-slate-600' value={state}>{state}</option>
+                                return <option key={index} selected={userBasicDetails.state ? userBasicDetails.state === state : false} className='text-white bg-slate-600' value={state}>{state}</option>
                             })}
                         </select>
                     </div>
@@ -94,7 +142,7 @@ const Step1 = ({setActiveSelection}:{setActiveSelection:Function}) => {
                         <select onChange={(e) => modidyUserDetails(e,"category")} className='text-slate-400 p-2 rounded bg-slate-600 outline-none'>
                             <option disabled selected className='text-white bg-slate-600' value={""}>Select your Category</option>
                             {categories.map((category,index) => {
-                                return <option key={index} className='text-white bg-slate-600' value={category}>{category}</option>
+                                return <option key={index} selected={userBasicDetails.category ? userBasicDetails.category === category : false} className='text-white bg-slate-600' value={category}>{category}</option>
                             })}
                             
                         </select>
@@ -107,7 +155,7 @@ const Step1 = ({setActiveSelection}:{setActiveSelection:Function}) => {
                         <select onChange={(e) => modidyUserDetails(e,"bloodGroup")} className='text-slate-400 p-2 pr-3 rounded bg-slate-600 outline-none'>
                             <option disabled selected className='text-white bg-slate-600' value={""}>Select Blood Group</option>
                             {bloodGroups.map((bloodGrp,index) => {
-                                return <option key={index} className='text-white bg-slate-600' value={bloodGrp}>{bloodGrp}</option>
+                                return <option key={index} selected={userBasicDetails.bloodGroup ? userBasicDetails.bloodGroup === bloodGrp : false} className='text-white bg-slate-600' value={bloodGrp}>{bloodGrp}</option>
                             })}
                         </select>
                     </div>
@@ -117,17 +165,17 @@ const Step1 = ({setActiveSelection}:{setActiveSelection:Function}) => {
                     <p className='w-28 md:w-36 lg:w-44'>Gender: </p>
                     <div className='flex gap-x-6 opacity-85 ml-1'>
                         <div className='flex items-center gap-x-1'>
-                            <input onChange={(e) => modidyUserDetails(e,"gender")} type="radio" id='`male_gender`' value={"male"} name='gender' />
+                            <input onChange={(e) => modidyUserDetails(e,"gender")} type="radio" checked={userBasicDetails.gender ? userBasicDetails.gender === "male" : false} id='`male_gender`' value={"male"} name='gender' />
                             <label htmlFor="`male_gender`">Male</label>
                         </div>
 
                         <div className='flex items-center gap-x-1'>
-                            <input onChange={(e) => modidyUserDetails(e,"gender")}  type="radio" id='female_gender' value={"female"} name='gender' />
+                            <input onChange={(e) => modidyUserDetails(e,"gender")}  type="radio" checked={userBasicDetails.gender ? userBasicDetails.gender === "female" : false} id='female_gender' value={"female"} name='gender' />
                             <label htmlFor="female_gender">Female</label>
                         </div>
 
                         <div className='flex items-center gap-x-1'>
-                            <input onChange={(e) => modidyUserDetails(e,"gender")}  type="radio" id='others_gender' value={"others"} name='gender' />
+                            <input onChange={(e) => modidyUserDetails(e,"gender")}  type="radio" checked={userBasicDetails.gender ? userBasicDetails.gender === "others" : false} id='others_gender' value={"others"} name='gender' />
                             <label htmlFor="others_gender">Others</label>
                         </div>
                     </div>

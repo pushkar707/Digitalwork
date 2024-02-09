@@ -39,20 +39,16 @@ const userSchema = new Schema({
     // I would have probably kept these four in a seperate model. Due to time constraints they are here
     totalFeesPaid: {
         type: Boolean,
-        default: false
     },
 
     learningTestFeesPaid:{
         type: Boolean,
-        default: false
     },
     testTaken: {
         type:Boolean,
-        default: false
     },
     testPassed:{
         type: Boolean,
-        default: false
     }
 })
 

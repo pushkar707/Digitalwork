@@ -76,11 +76,11 @@ const Step4 = () => {
             </div>
           </div>
 
-          <div className='mt-2 flex justify-between w-full md:w-36 lg:w-96'>
+          {/* <div className='mt-2 flex justify-between w-full md:w-36 lg:w-96'>
                 <Button variant="contained" color="success" className='mt-5 bg-green-500 rounded-lg px-5' size="medium">
                     Back
                 </Button>
-            </div>
+            </div> */}
         </div>
     </>
   )
