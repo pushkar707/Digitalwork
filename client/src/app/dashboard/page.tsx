@@ -19,6 +19,7 @@ const Page = () => {
 
   const [user, setUser] = useState<null | {[key:string]:any}>(null)
   const [activeSelection, setActiveSelection] = useState<number>(0)
+  const [firstLoad, setfirstLoad] = useState(true)
 
   const getUserDetails = async () => {
     const refreshToken = localStorage.getItem("refreshToken")
@@ -36,7 +37,7 @@ const Page = () => {
 
   useEffect(() => {
     getUserDetails()
-  },[])
+  },[activeSelection])
 
   const selectStep = () => {
     if(user !== null){
@@ -54,11 +55,14 @@ const Page = () => {
       else if(!user.TestTaken)
         setActiveSelection(4)
       
+      setfirstLoad(false)
     }
   }
 
   useEffect(() => {
-    selectStep()
+    if(firstLoad){
+      selectStep()
+    }
   },[user])
 
   const leftMenu= [

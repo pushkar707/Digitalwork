@@ -3,6 +3,7 @@ import { verifyJwtToken } from "../utils/JWT";
 import User from "../models/User";
 import { getAwsUploadLink } from "../utils/aws_s3";
 import { ExtendedRequest, checkRefreshToken } from "../utils/middleware";
+import { generatePDF } from "../utils/generatePdf";
 
 const router = Router()
 
@@ -79,6 +80,22 @@ router.put("/testResults", checkRefreshToken, async (req:ExtendedRequest, res:Re
     const {testPassed} = req.body
     await User.findByIdAndUpdate(userId, {testPassed})
     return res.json({success:true, message: "User updated"})
+})
+
+router.get("/license_pdf", checkRefreshToken, async (req:ExtendedRequest, res:Response) => {
+    const userId = req.userId
+    const user = await User.findById(userId)
+    if(!user)
+        return
+
+    if(!user.testPassed){
+        return res.json({error:true, message:"User has not passed the test yet"})
+    }
+
+    const pdfBuffer = generatePDF(user)
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=generated-pdf.pdf');
+    res.send(pdfBuffer);
 })
 
 module.exports = router
