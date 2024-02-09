@@ -70,7 +70,6 @@ const Page = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
-        setoptionSelected(null)
         console.log(typeof(optionSelected));
         console.log(currentQuestion.answer);        
         

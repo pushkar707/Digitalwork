@@ -8,13 +8,14 @@ import Step2 from '../components/steps/Step2';
 import Step3 from '../components/steps/Step3';
 import Step4 from '../components/steps/Step4';
 import Step5 from '../components/steps/Step5';
+import Step6 from '../components/steps/Step6';
 
 
 const Page = () => {
   const router = useRouter()
 
   const [user, setUser] = useState({})
-  const [activeSelection, setActiveSelection] = useState<number>(3)
+  const [activeSelection, setActiveSelection] = useState<number>(5)
 
   useEffect(() => {
     const verifyToken = async() => {
@@ -54,7 +55,7 @@ const Page = () => {
     {heading: "Add Documents", subHeading:"Upload your documents"},
     {heading: "Fee Payment", subHeading:"Pay License fees"},
     {heading: "Give Test", subHeading:"Attempt License test"},
-    {heading: "Your details", subHeading:"Fill your basic details"},
+    {heading: "Complete", subHeading:"Get Your License!!"},
   ]
   return (
     <main className='min-h-screen max-w-screen overflow-hidden bg-slate-800 py-12 px-8 xl:px-12 text-white'>
@@ -91,8 +92,8 @@ const Page = () => {
             activeSelection === 1? <Step2 setActiveSelection={setActiveSelection} /> :
             activeSelection === 2 ? <Step3 setActiveSelection={setActiveSelection} /> :
             activeSelection === 3 ? <Step4/> :
-            activeSelection === 4 ? <Step5/> : "" }
-            
+            activeSelection === 4 ? <Step5/> :
+            activeSelection === 5 ? <Step6/> : "" }            
           </div>
         </div>
       </div>
