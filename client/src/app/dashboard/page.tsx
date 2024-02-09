@@ -1,6 +1,6 @@
 "use client"
 import axios from 'axios'
-import React,{useState,useEffect, ChangeEvent} from 'react'
+import React,{useState,useEffect, ChangeEvent, MouseEvent} from 'react'
 import {useRouter} from "next/navigation"
 import Person2Icon from '@mui/icons-material/Person2';
 import Step1 from '../components/steps/Step1';
@@ -9,6 +9,9 @@ import Step3 from '../components/steps/Step3';
 import Step4 from '../components/steps/Step4';
 import Step5 from '../components/steps/Step5';
 import Step6 from '../components/steps/Step6';
+import { Button } from '@mui/material';
+import { signOut } from 'firebase/auth';
+import { auth } from '../utils/firebaseConfig';
 
 
 const Page = () => {
@@ -57,10 +60,20 @@ const Page = () => {
     {heading: "Give Test", subHeading:"Attempt License test"},
     {heading: "Complete", subHeading:"Get Your License!!"},
   ]
+  async function logoutUser(event: MouseEvent<HTMLDivElement>): Promise<void> {
+    localStorage.removeItem("refreshToken")
+    signOut(auth).then(() => console.log("User logged out successfully")).catch(e => console.log("error"))
+    return router.push("/")
+  }
+
   return (
-    <main className='min-h-screen max-w-screen overflow-hidden bg-slate-800 py-12 px-8 xl:px-12 text-white'>
+    <main className='min-h-screen max-w-screen overflow-hidden bg-slate-800 py-12 px-8 xl:px-12 text-white relative'>
       <p className='text-3xl mb-2 font-medium'>You are very close to start driving!!</p>
       <p className='opacity-50'>You will obtain you license once you complete these steps</p>
+
+      <div onClick={logoutUser} >
+        <Button variant="contained" color="primary" className='absolute top-12 right-10 bg-blue-600 rounded-lg normal-case' size="medium" style={{textTransform: "unset"}}>Logout</Button>
+      </div>
 
       <div className='mt-8'>
         <hr className='opacity-20 border-none h-[0.5px] bg-white w-full'/>
