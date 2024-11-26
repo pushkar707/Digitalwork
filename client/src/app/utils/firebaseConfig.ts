@@ -44,6 +44,7 @@ export const githubSignIn = () => {
   const provider = new GithubAuthProvider()
   signInWithPopup(auth, provider).then(async (result:any) => {
     const {reloadUserInfo} = result.user
+    // This is not how refresh token should be created. Firebase will provide me a OAuth token, which should be validated on API using firebase SDK
     const res = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/auth/firebase",{
       name:reloadUserInfo.screenName,email:reloadUserInfo.email, profileImageUrl:reloadUserInfo.photoUrl
     })
